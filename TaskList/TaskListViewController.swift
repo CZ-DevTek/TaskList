@@ -10,7 +10,7 @@ import UIKit
 final class TaskListViewController: UITableViewController {
     private var taskList: [ToDoTask] = []
     private let cellID = "task"
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -21,17 +21,6 @@ final class TaskListViewController: UITableViewController {
     
     @objc private func addNewTask() {
         showAlert(withTitle: "New Task", andMessage: "What do you want to do?")
-    }
-    
-    private func fetchData() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let fetchRequest = ToDoTask.fetchRequest()
-        
-        do {
-            taskList = try appDelegate.persistentContainer.viewContext.fetch(fetchRequest)
-        } catch {
-            print(error)
-        }
     }
     
     private func showAlert(withTitle title: String, andMessage message: String) {
@@ -49,16 +38,20 @@ final class TaskListViewController: UITableViewController {
         present(alert, animated: true)
     }
     
+    private func fetchData() {
+        taskList = StorageManager.shared.fetchData()
+    }
+    
     private func save(_ taskName: String) {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let task = ToDoTask(context: appDelegate.persistentContainer.viewContext)
+        let task = ToDoTask(context: StorageManager.shared.persistentContainer.viewContext)
+        
         task.title = taskName
         taskList.append(task)
         
         let indexPath = IndexPath(row: taskList.count - 1, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
         
-        appDelegate.saveContext()
+        StorageManager.shared.saveContext()
     }
 }
 
