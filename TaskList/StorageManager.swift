@@ -45,4 +45,19 @@ final class StorageManager {
             return []
         }
     }
+    func save(_ taskName: String) {
+        let context = persistentContainer.viewContext
+        let task = ToDoTask(context: context)
+        task.title = taskName
+        saveContext()
+    }
+    func editTask(_ task: ToDoTask, with newName: String) {
+        task.title = newName
+        saveContext()
+    }
+    func deleteTask(_ task: ToDoTask) {
+        let context = persistentContainer.viewContext
+        context.delete(task)
+        saveContext()
+    }
 }
