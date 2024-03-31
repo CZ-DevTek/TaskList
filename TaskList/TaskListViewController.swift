@@ -31,28 +31,28 @@ final class TaskListViewController: UITableViewController {
         tableView.reloadData()
     }
     private func showAlert(withTitle title: String, andMessage message: String, taskToEdit: ToDoTask?) {
-            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            
-            alert.addTextField { textField in
-                if let taskToEdit = taskToEdit {
-                    textField.text = taskToEdit.title
-                }
-                textField.placeholder = "Task Name"
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        alert.addTextField { textField in
+            if let taskToEdit = taskToEdit {
+                textField.text = taskToEdit.title
             }
-            let okAction = UIAlertAction(title: "Save", style: .default) { [unowned self] _ in
-                guard let inputText = alert.textFields?.first?.text, !inputText.isEmpty else { return }
-                if let taskToEdit = taskToEdit {
-                    StorageManager.shared.editTask(taskToEdit, with: inputText)
-                } else {
-                    StorageManager.shared.save(inputText)
-                }
-                fetchData()
+            textField.placeholder = "Task Name"
+        }
+        let okAction = UIAlertAction(title: "Save", style: .default) { [unowned self] _ in
+            guard let inputText = alert.textFields?.first?.text, !inputText.isEmpty else { return }
+            if let taskToEdit = taskToEdit {
+                StorageManager.shared.editTask(taskToEdit, with: inputText)
+            } else {
+                StorageManager.shared.save(inputText)
             }
-            let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
-            alert.addAction(okAction)
-            alert.addAction(cancelAction)
-            
-            present(alert, animated: true)
+            fetchData()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true)
     }
 }
 // MARK: - UITableViewDataSource
