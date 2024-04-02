@@ -12,7 +12,7 @@ final class StorageManager {
     static let shared = StorageManager()
     
     // MARK: - Core Data stack
-    lazy var persistentContainer: NSPersistentContainer = {
+    private let persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "TaskList")
         container.loadPersistentStores { _, error in
             if let error = error as NSError? {
